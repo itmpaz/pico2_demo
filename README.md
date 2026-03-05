@@ -3,6 +3,15 @@
 Raspberry PI Pico 2 Demo 
 
 
+# Episode 1 
+
+[Video](https://youtu.be/eUxBCy6Yhak)
+
+
+[Code](https://github.com/itmpaz/pico2_demo/archive/refs/tags/EPISODE_1.zip)
+
+
+
 
 
 
