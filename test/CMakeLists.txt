@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(test test.c )
+add_executable(test test.c mhz19b.c)
 
 pico_set_program_name(test "test")
 pico_set_program_version(test "0.1")
