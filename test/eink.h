@@ -6,3 +6,6 @@ void eink_update();
 void eink_clear();
 void eink_wakeup();
 void eink_sleep();
+
+void eink_drawplot();
+void eink_addplot(int value);
