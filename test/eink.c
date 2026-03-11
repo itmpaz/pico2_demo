@@ -29,9 +29,11 @@ uint eink_plotpos=0;
 void eink_addplot(int value)
 {
 	eink_plot[eink_plotpos]=value/EINK_PLOT_FACTOR;
+	printf("Plot[%i] = %i\n",eink_plotpos,value);
 	eink_plotpos++;
 	if (eink_plotpos==EINK_PLOTWIDTH)
 		eink_plotpos=0;
+
 }
 
 
@@ -73,12 +75,9 @@ void eink_drawplot()
 
 			int yd0 = lasty>y ? y : lasty;	
 			int yd1 = lasty>y ? lasty : y;
-			printf("%i,%i(%i)[%i]{%i} - ",x,y,eink_plot[pos],pos,eink_plot[20]);
 			for(int yy = yd0; yy<=yd1;yy++)
 			{	eink_dot(x,yy,EINK_BLACK);
-				printf("%i,",yy);
 			}
-			printf("\n");
 
 		} else
 		{	eink_dot(x,y,EINK_BLACK);
@@ -99,7 +98,7 @@ void eink_drawplot()
 		}
 
 	}
-	printf("plot done\n");
+
 	
 }
 
