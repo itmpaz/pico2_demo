@@ -19,12 +19,16 @@ Raspberry PI Pico 2 Demo
 
 # Episode 2
 
+[Video](https://youtu.be/eSjVbBNCYCo)
+
 [Code](https://github.com/itmpaz/pico2_demo/archive/refs/tags/EPISODE_2.zip)
 
 [MH-Z19B sensor documentation](https://www.winsen-sensor.com/d/files/infrared-gas-sensor/mh-z19b-co2-ver1_0.pdf)
 
 
 # Episode 3
+
+[Video](https://youtu.be/68Q-hpKmh2A)
 
 [1.54inch E-Ink display module](https://www.waveshare.com/product/displays/e-paper/epaper-3/1.54inch-e-paper-module.htm?___SID=U)
 
