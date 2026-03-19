@@ -6,6 +6,8 @@ Raspberry PI Pico 2 Demo
 
 [RPI Pico examples github page](https://github.com/raspberrypi/pico-examples)
 
+[Wiring](pico2_demo_wiring.png)
+
 # Episode 1 
 
 [Video](https://youtu.be/eUxBCy6Yhak)
@@ -35,3 +37,9 @@ Raspberry PI Pico 2 Demo
 [1.54inch E-Ink display module documentation](https://files.waveshare.com/upload/e/e5/1.54inch_e-paper_V2_Datasheet.pdf)
 
 [E-Paper demo code](https://files.waveshare.com/upload/7/71/E-Paper_code.zip)
+
+
+# Episode 4
+
+
+
