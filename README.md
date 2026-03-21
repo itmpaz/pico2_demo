@@ -44,8 +44,9 @@ Raspberry PI Pico 2 Demo
 # Episode 4 - BME280
 
 
+[Code](https://github.com/itmpaz/pico2_demo/archive/refs/tags/EPISODE_4.zip)
+
 [BME280 sensor documentation](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf)
 
 [BMP280 demo code](https://github.com/raspberrypi/pico-examples/blob/master/i2c/bmp280_i2c/bmp280_i2c.c)
-
 
