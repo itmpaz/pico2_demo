@@ -32,7 +32,9 @@ Raspberry PI Pico 2 Demo
 
 [Video](https://youtu.be/68Q-hpKmh2A)
 
-[1.54inch E-Ink display module](https://www.waveshare.com/product/displays/e-paper/epaper-3/1.54inch-e-paper-module.htm?___SID=U)
+[Code](https://github.com/itmpaz/pico2_demo/archive/refs/tags/EPISODE_3.zip)
+
+[1.54inch E-Ink display module](https://www.waveshare.com/product/displays/e-paper/epaper-3/1.54inch-e-paper-module.htm)
 
 [1.54inch E-Ink display module documentation](https://files.waveshare.com/upload/e/e5/1.54inch_e-paper_V2_Datasheet.pdf)
 
