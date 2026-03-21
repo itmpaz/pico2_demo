@@ -6,9 +6,9 @@ Raspberry PI Pico 2 Demo
 
 [RPI Pico examples github page](https://github.com/raspberrypi/pico-examples)
 
-[Wiring](pico2_demo_wiring.png)
+[Wiring](pic_wiring.png)
 
-# Episode 1 
+# Episode 1 - Pilot
 
 [Video](https://youtu.be/eUxBCy6Yhak)
 
@@ -19,7 +19,7 @@ Raspberry PI Pico 2 Demo
 [RPI Debug Probe documentation](https://datasheets.raspberrypi.com/debug/raspberry-pi-debug-probe-product-brief.pdf)
 
 
-# Episode 2
+# Episode 2 - MH-Z19B 
 
 [Video](https://youtu.be/eSjVbBNCYCo)
 
@@ -28,7 +28,7 @@ Raspberry PI Pico 2 Demo
 [MH-Z19B sensor documentation](https://www.winsen-sensor.com/d/files/infrared-gas-sensor/mh-z19b-co2-ver1_0.pdf)
 
 
-# Episode 3
+# Episode 3 - E-Ink
 
 [Video](https://youtu.be/68Q-hpKmh2A)
 
@@ -38,8 +38,14 @@ Raspberry PI Pico 2 Demo
 
 [E-Paper demo code](https://files.waveshare.com/upload/7/71/E-Paper_code.zip)
 
+[Bit operations explained](pic_eink_bit_operations.png)
 
-# Episode 4
 
+# Episode 4 - BME280
+
+
+[BME280 sensor documentation](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf)
+
+[BMP280 demo code](https://github.com/raspberrypi/pico-examples/blob/master/i2c/bmp280_i2c/bmp280_i2c.c)
 
 
