@@ -15,6 +15,8 @@
 #define EINK_PLOTWIDTH  EPD_1IN54_V2_WIDTH
 
 extern sFONT Font24;
+extern sFONT Font50;
+extern sFONT Font16;
 
 uint8_t eink_img[EINK_IMGSIZE]={0};
 
@@ -25,6 +27,19 @@ uint eink_plotpos=0;
 #define EINK_NORMPPM 400
 
 #define EINK_PLOT_FACTOR 50
+
+
+
+sFONT* eink_getfont(int fontid)
+{
+	if (fontid == EINK_FNT_BIG)
+		return &Font50;
+	if (fontid == EINK_FNT_MID)
+		return &Font24;
+	return &Font16;
+
+}
+
 
 void eink_addplot(int value)
 {
@@ -103,35 +118,38 @@ void eink_drawplot()
 }
 
 
-void eink_print_char(uint8_t* image, int x, int y, char ch)
+void eink_print_char(uint8_t* image, int x, int y, char ch,int fontid)
 {
-
+	sFONT* font = eink_getfont(fontid);
     uint x_byte = x / 8;
-    uint fnt_w_byte = (Font24.Width+7) / 8;
-    uint fnt_ch_size = fnt_w_byte*Font24.Height;
+    uint fnt_w_byte = (font->Width+7) / 8;
+    uint fnt_ch_size = fnt_w_byte*font->Height;
     uint ch_index = ch - ' ';
     uint8_t one=1;
-    for(uint j=0;j<Font24.Height;j++)
+    for(uint j=0;j<font->Height;j++)
  		for(uint i=0;i<fnt_w_byte;i++)
 			for(uint k=0;k<8;k++)
 			{
 				uint fnt_n = ch_index*fnt_ch_size + j*fnt_w_byte + i ;
-				uint8_t fnt_bit = Font24.table[ fnt_n  ] & (one << (7-k));
+				uint8_t fnt_bit = font->table[ fnt_n  ] & (one << (7-k));
 				if (fnt_bit!=0)
 					eink_dot(x+i*8+k, y+j, EINK_BLACK);
         	}
 
 }
 
-void eink_print(int x, int y, char* text)
+uint16_t eink_print(int x, int y, char* text,int fontid)
 {
-    uint step = Font24.Width; 
-    uint pos=0;
+
+	sFONT* font = eink_getfont(fontid);
+    uint16_t step = font->Width; 
+    uint16_t pos=0;
     while( text[pos]!=0)
     {
-        eink_print_char(eink_img, x+pos*step, y, text[pos]);
+        eink_print_char(eink_img, x+pos*step, y, text[pos],fontid);
         pos++;
     }
+	return x+pos*step;
 }
 
 

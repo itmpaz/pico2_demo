@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(test test.c mhz19b.c DEV_Config.c EPD_1in54_V2.c font24.c eink.c)
+add_executable(test test.c mhz19b.c DEV_Config.c EPD_1in54_V2.c font24.c eink.c bme280_i2c.c font16.c font50.c)
 
 pico_set_program_name(test "test")
 pico_set_program_version(test "0.1")
@@ -47,7 +47,9 @@ pico_enable_stdio_usb(test 0)
 # Add the standard library to the build
 target_link_libraries(test
         pico_stdlib
-        hardware_spi)
+        hardware_spi
+        hardware_i2c
+        )
 
 # Add the standard include files to the build
 target_include_directories(test PRIVATE

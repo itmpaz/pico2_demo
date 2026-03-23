@@ -96,7 +96,7 @@ UBYTE DEV_Digital_Read(UWORD Pin)
 void DEV_SPI_Write_nByte(uint8_t *pData, uint32_t Len)
 {
    // cs_select();
-    spi_write_blocking(spi_default, pData, 1);
+    spi_write_blocking(pico_spi, pData, Len);
     //cs_deselect();
 
 }
