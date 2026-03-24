@@ -74,7 +74,7 @@ int main()
         eink_print(0,0,text,EINK_FNT_MID);
         sprintf(text,"%.1f C",temp);
         eink_print(0,25,text,EINK_FNT_MID);
-        sprintf(text,"%.1f %% RH",hum);
+        sprintf(text,"%.1f %%RH",hum);
         eink_print(0,50,text,EINK_FNT_MID);
         printf("P %.3f hPa, T %.2f C, H %.2f %%RH\n",pres,temp,hum);
 

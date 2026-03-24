@@ -5,14 +5,18 @@
 #include "Debug.h"
 
 
-#define EINK_BYTESPERROW ((EPD_1IN54_V2_WIDTH+7) / 8)
-#define EINK_IMGSIZE (EINK_BYTESPERROW * EPD_1IN54_V2_HEIGHT) 
+#define EINK_WIDTH  EPD_1IN54_V2_WIDTH
+#define EINK_HEIGHT EPD_1IN54_V2_HEIGHT
+
+#define EINK_BYTESPERROW ((EINK_WIDTH+7) / 8)
+#define EINK_IMGSIZE (EINK_BYTESPERROW * EINK_HEIGHT) 
 
 
 #define EINK_WHITE 0xFF
 #define EINK_BLACK 0x00
 
-#define EINK_PLOTWIDTH  EPD_1IN54_V2_WIDTH
+#define EINK_PLOTWIDTH  EINK_WIDTH
+
 
 extern sFONT Font24;
 extern sFONT Font50;
@@ -28,6 +32,30 @@ uint eink_plotpos=0;
 
 #define EINK_PLOT_FACTOR 50
 
+
+#define EINK_ROTATE 90
+
+#if defined(EINK_ROTATE) && EINK_ROTATE!=90 && EINK_ROTATE!=180 && EINK_ROTATE!=270 && EINK_ROTATE!=0 
+#error Wrong EINK_ROTATE macro value
+#endif
+
+
+void eink_rotate_screen(int* x, int* y)
+{
+#if	EINK_ROTATE==270
+	int t = *x;
+	*x = *y;
+	*y = EINK_WIDTH - t;
+#elif EINK_ROTATE==180
+	*x = EINK_WIDTH - *x;
+	*y = EINK_HEIGHT -*y;
+#elif EINK_ROTATE==90
+	int t = *x;
+	*x = EINK_HEIGHT -*y;
+	*y =  t;
+#endif
+
+}
 
 
 sFONT* eink_getfont(int fontid)
@@ -57,8 +85,11 @@ void eink_addplot(int value)
 
 void eink_dot(int x, int y, uint8_t color)
 {
-	if ((x>=EPD_1IN54_V2_WIDTH)||(x<0)||(y>=EPD_1IN54_V2_HEIGHT)||(y<0))
+	if ((x>=EINK_WIDTH)||(x<0)||(y>=EINK_HEIGHT)||(y<0))
 		return;
+
+	eink_rotate_screen(&x,&y);		
+
 	uint x_byte = x / 8;
 	uint x_pos = 7- (x % 8);
 	uint8_t one = 1;
@@ -82,7 +113,7 @@ void eink_drawplot()
 			pos=EINK_PLOTWIDTH;
 		pos--;
 		
-		int y = EPD_1IN54_V2_HEIGHT - eink_plot[pos];
+		int y = EINK_HEIGHT - eink_plot[pos];
 
 		if (lasty != -1)
 		{
@@ -101,7 +132,7 @@ void eink_drawplot()
 		lasty = y;
 
 
-		int y0 = EPD_1IN54_V2_HEIGHT - NORMPPM/EINK_PLOT_FACTOR;
+		int y0 = EINK_HEIGHT - NORMPPM/EINK_PLOT_FACTOR;
 
 		if (x % 3==0)
 			eink_dot(x,y0,EINK_BLACK);
@@ -109,7 +140,7 @@ void eink_drawplot()
 		if (x % 25 == 0)
 		{	for(int k=0;k<60;k++)
 				if (k%3==0)
-					eink_dot(x,EPD_1IN54_V2_HEIGHT-k,EINK_BLACK);
+					eink_dot(x,EINK_HEIGHT-k,EINK_BLACK);
 		}
 
 	}
