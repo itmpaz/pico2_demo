@@ -37,7 +37,7 @@ int main()
     eink_init();
     bme280_init();
 
-    eink_print(20,20,"Pico 2",EINK_FNT_BIG);
+    eink_print(0,20,APP_TITLE,EINK_FNT_BIG);
     eink_update();
 
     

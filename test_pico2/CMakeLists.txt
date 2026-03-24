@@ -22,8 +22,11 @@ set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
 if (EXISTS ${picoVscode})
     include(${picoVscode})
 endif()
+
 # ====================================================================================
 set(PICO_BOARD pico2 CACHE STRING "Board type")
+
+
 
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
@@ -35,7 +38,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(test test.c mhz19b.c DEV_Config.c EPD_1in54_V2.c font24.c eink.c bme280_i2c.c font16.c font50.c)
+add_executable(test ../src/test.c ../src/mhz19b.c ../src/DEV_Config.c ../src/EPD_1in54_V2.c ../src/font24.c ../src/eink.c ../src/bme280_i2c.c ../src/font16.c ../src/font50.c)
 
 pico_set_program_name(test "test")
 pico_set_program_version(test "0.1")
