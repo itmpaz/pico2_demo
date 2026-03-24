@@ -2,6 +2,9 @@
 
 Raspberry PI Pico 2 Demo 
 
+![eink screen](eink_screen.png)
+
+
 [Pico 2 documentation](https://datasheets.raspberrypi.com/pico/pico-2-datasheet.pdf)
 
 [RPI Pico examples github page](https://github.com/raspberrypi/pico-examples)
