@@ -53,9 +53,37 @@ void mhz19b_init()
     irq_set_exclusive_handler(UART_IRQ, on_uart_rx);
     irq_set_enabled(UART_IRQ, true);
     uart_set_irq_enables(UART_ID, true, false);
+}
 
+
+bool mhz19b_test()
+{
+    uint retry = 0;
+    const uint retrymax = 3;
+    uint c = mhz19b_data()->co2_counter;
+    bool result = false;
+
+    while(1)
+    {   mhz19b_read();
+        sleep_ms(100);
+        if (c==mhz19b_data()->co2_counter)
+        {
+            retry++;
+            if (retry>retrymax)
+                break;
+            printf("MH-Z19B read error. retry %i(%i)\n",retry,retrymax);
+            mhz19b_protocolreset();
+            sleep_ms(500);
+            continue;
+        }
+        result = true;
+        break;
+    }
+
+    return result;
 
 }
+
 
 
 void mhz19b_read()

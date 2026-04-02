@@ -33,7 +33,7 @@ project(pico1_test C CXX ASM)
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-add_definitions(-DAPP_TITLE="Pico 1")
+add_definitions(-DAPP_TITLE="Pico 1z")
 
 # Add executable. Default name is the project name, version 0.1
 

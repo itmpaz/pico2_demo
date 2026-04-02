@@ -78,7 +78,8 @@
 #define NUM_CALIB_PARAMS (24+8)
 
 struct bme280_calib_param {
-    // temperature params
+
+   // temperature params
     uint16_t dig_t1;
     int16_t dig_t2;
     int16_t dig_t3;
@@ -108,11 +109,7 @@ struct bme280_calib_param {
 
 struct bme280_calib_param bme280_params={0};
 
-void bme280_init_sensor() {
-
-
-
-
+int bme280_init_sensor() {
 
     // use the "handheld device dynamic" optimal setting (see datasheet)
     uint8_t buf[2];
@@ -141,15 +138,15 @@ void bme280_init_sensor() {
     i2c_write_blocking(i2c_default, ADDR, buf, 2, false);
 
 
-/*
+
     uint8_t chipid;
     uint8_t reg = REG_CHIP_ID;
     i2c_write_blocking(i2c_default, ADDR, &reg, 1, true);  // true to keep master control of bus
     i2c_read_blocking(i2c_default, ADDR, &chipid, 1, false);  // false - finished with bus    
 
-    printf("Chip id: 0x%02X\n",chipid);
+   
+    return chipid;
 
-*/
 
 }
 
@@ -250,26 +247,7 @@ float compensateHumidity(int32_t adc_H, struct bme280_calib_param*  cal, int32_t
 }
 
 
-/*
-H1 0
-H2 373
-H3 0
-H4 293
-H5 50
-H6 30
-21.36 632.21 80.36
 
-Chip id: 0x60
-buf: 00 75 01 00 12 25 03 1E 
-H1 0
-H2 373
-H3 0
-H4 293
-H5 515
-H6 30
-
-
-*/
 
 
 void bme280_get_calib_params(struct bme280_calib_param* params) {
@@ -316,7 +294,7 @@ void bme280_get_calib_params(struct bme280_calib_param* params) {
     params->dig_H4 = (int16_t)((buf[28]<<4) | (buf[29] & 0xF));
     params->dig_H5 = (((int16_t)buf[30]) <<4 ) | (buf[29] >> 4 );
     params->dig_H6 = (int8_t)buf[31];
-
+/*
     printf("buf: ");
     for(int i=24;i<=31;i++)
         printf("%02X ",buf[i]);
@@ -328,7 +306,7 @@ void bme280_get_calib_params(struct bme280_calib_param* params) {
 	printf("H4 %d\n",params->dig_H4);
 	printf("H5 %d\n",params->dig_H5);
 	printf("H6 %d\n",params->dig_H6);
-	
+*/	
 
 }
 
@@ -351,11 +329,12 @@ int bme280_init() {
     gpio_pull_up(PICO_BME280_I2C_SCL_PIN);
 
     
-    bme280_init_sensor();
+    int chipid = bme280_init_sensor();
 
-    
-    
-    bme280_get_calib_params(&bme280_params);
+    if (chipid==BME280_CHIPID)
+        bme280_get_calib_params(&bme280_params);
+
+    return chipid;
 
 
 

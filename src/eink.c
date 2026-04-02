@@ -33,7 +33,7 @@ uint eink_plotpos=0;
 #define EINK_PLOT_FACTOR 50
 
 
-#define EINK_ROTATE 90
+#define EINK_ROTATE 270
 
 #if defined(EINK_ROTATE) && EINK_ROTATE!=90 && EINK_ROTATE!=180 && EINK_ROTATE!=270 && EINK_ROTATE!=0 
 #error Wrong EINK_ROTATE macro value
@@ -72,7 +72,7 @@ sFONT* eink_getfont(int fontid)
 void eink_addplot(int value)
 {
 	eink_plot[eink_plotpos]=value/EINK_PLOT_FACTOR;
-	printf("Plot[%i] = %i\n",eink_plotpos,value);
+	//printf("Plot[%i] = %i\n",eink_plotpos,value);
 	eink_plotpos++;
 	if (eink_plotpos==EINK_PLOTWIDTH)
 		eink_plotpos=0;

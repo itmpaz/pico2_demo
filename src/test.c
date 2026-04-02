@@ -29,20 +29,47 @@ void wait_and_update_plot(uint ms)
 }
 
 
+#define SHOW_TIME_OK 10000
+#define SHOW_TIME_ERROR 60000
+
 int main()
 {
-    printf("Init\n");
-    stdio_init_all();
-    mhz19b_init();
-    eink_init();
-    bme280_init();
 
-    eink_print(0,20,APP_TITLE,EINK_FNT_BIG);
+    stdio_init_all();
+    printf("Init\n");
+
+    mhz19b_init();
+    bool z19_ok = mhz19b_test();
+
+    eink_init();
+    int bme_chipid = bme280_init();
+    printf("BME Chip id: 0x%02X\n",bme_chipid);
+
+    uint show_time = SHOW_TIME_OK;
+
+    //eink_print(0,20,APP_TITLE,EINK_FNT_BIG);
+    eink_print(0,0,"Air station",EINK_FNT_MID);
+    eink_print(0,25,"Pico 1 zero",EINK_FNT_MID);
+    eink_print(32,175,"APR 2026",EINK_FNT_MID);
+    if (bme_chipid==BME280_CHIPID)
+    {   eink_print(0,75,"BME280..........OK",EINK_FNT_SML);
+    } else
+    {   eink_print(0,75,"BME280.......ERROR",EINK_FNT_SML);
+        show_time = SHOW_TIME_ERROR;
+    }
+    if (z19_ok)
+    {   eink_print(0,100,"MH-Z19B.........OK",EINK_FNT_SML);
+    } else
+    {   eink_print(0,100,"MH-Z19B......ERROR",EINK_FNT_SML);
+        show_time = SHOW_TIME_ERROR;
+    }
+
+
     eink_update();
 
     
     eink_sleep();
-    sleep_ms(1000);
+    sleep_ms(show_time);
     
     
 
