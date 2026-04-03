@@ -36,29 +36,69 @@ void wait_and_update_plot(uint ms,SENSORS* s)
         uint64_t dt = (t-t0)/1000;
         if (dt>PLOT_UPDATE_PERIOD_SEC *1000)
         {   eink_plot_add(EINK_PLOT_CO2,s->co2);
+            eink_plot_add(EINK_PLOT_HUM,s->hum);
+            eink_plot_add(EINK_PLOT_TMP,s->temp);
+            eink_plot_add(EINK_PLOT_PRS,s->pres);
             t0 = t;
         }
-        button_sleep(sleep_step);
+        if (button_sleep(sleep_step))
+            break;
         sleep_sum+=sleep_step;
     }
 
 }
 
-void print_sensors(SENSORS* s)
+void print_sensors(SENSORS* s,int plotid)
 {
     char text[50];
+    int y = 0;
+    const int smallstep = 25;
+    const int bigstep = 55;
 
-    sprintf(text,"%d ",(uint)s->co2);
-    uint pos = eink_print(0,85,text,EINK_FNT_BIG);    
-    eink_print(pos,98,"ppm",EINK_FNT_MID);    
+    if (plotid!=EINK_PLOT_PRS)
+    {   sprintf(text,"%.1f hPa",s->pres);
+        eink_print(0,y,text,EINK_FNT_MID);
+        y+=smallstep;
+    } else
+    {   sprintf(text,"%d ",(uint)s->pres);
+        uint pos = eink_print(0,y,text,EINK_FNT_BIG);    
+        eink_print(pos,y+13,"hPa",EINK_FNT_MID); 
+        y+=bigstep;
+    }
+        
+    if (plotid!=EINK_PLOT_TMP)
+    {   sprintf(text,"%.1f 'C",s->temp);
+        eink_print(0,y,text,EINK_FNT_MID);
+        y+=smallstep;
+    } else
+    {   sprintf(text,"%.1f 'C",s->temp);
+        eink_print(0,y,text,EINK_FNT_BIG);
+        y+=bigstep;
+    }
+
+    if (plotid!=EINK_PLOT_HUM)
+    {   sprintf(text,"%.1f %%",s->hum);
+        eink_print(0,y,text,EINK_FNT_MID);
+         y+=smallstep;
+    } else
+    {   sprintf(text,"%.1f %%",s->hum);
+        eink_print(0,y,text,EINK_FNT_BIG);
+         y+=bigstep;
+    }
+
+    if (plotid!=EINK_PLOT_CO2)
+    {   sprintf(text,"%d ppm",(uint)s->co2);
+        eink_print(0,y,text,EINK_FNT_MID);
+        y+=smallstep;
+    } else
+    {   sprintf(text,"%d ",(uint)s->co2);
+        uint pos = eink_print(0,y,text,EINK_FNT_BIG);    
+        eink_print(pos,y+13,"ppm",EINK_FNT_MID);    
+        y+=bigstep;
+        
+    }
 
 
-    sprintf(text,"%.1f hPa",s->pres);
-    eink_print(0,0,text,EINK_FNT_MID);
-    sprintf(text,"%.1f 'C",s->temp);
-    eink_print(0,25,text,EINK_FNT_MID);
-    sprintf(text,"%.1f %%RH",s->hum);
-    eink_print(0,50,text,EINK_FNT_MID);
 
 }
 
@@ -67,8 +107,11 @@ void print_sensors(SENSORS* s)
 
 #define SHOW_TIME_OK 10000
 #define SHOW_TIME_ERROR 60000
-//#define SHOW_TITLE_SCREEN
-#define MEASUREMENT_DELAY 10000
+#define MEASUREMENT_DELAY 60000
+#define SHOW_TITLE_SCREEN
+//#define MEASUREMENT_DELAY 10000
+
+
 
 int main()
 {
@@ -93,7 +136,6 @@ int main()
 
 #ifdef SHOW_TITLE_SCREEN   
 
-    //eink_print(0,20,APP_TITLE,EINK_FNT_BIG);
     eink_print(0,0,"Air station",EINK_FNT_MID);
     eink_print(0,25,"Pico 1 zero",EINK_FNT_MID);
     eink_print(32,175,"APR 2026",EINK_FNT_MID);
@@ -120,6 +162,7 @@ int main()
     printf("Start\n");
     uint c=0;
     SENSORS s={0};
+    int plotid = EINK_PLOT_CO2;
 
     while(1)
     {
@@ -139,19 +182,29 @@ int main()
         bme280_read(&s.pres,&s.temp,&s.hum);
         printf("P %.3f hPa, T %.2f C, H %.2f %%RH\n",s.pres,s.temp,s.hum);
 
+        if (button_get_singleclick_counter()>0)
+        {   plotid++;
+            if (plotid>=EINK_PLOT_MAX)
+                plotid = 0;
+            button_clickreset();  
+            printf("Plot #%i\n",plotid);
+        }
+
+#ifndef SHOW_TITLE_SCREEN         
+
         s.co2 = 555.555;
         s.hum = 33.333;
         s.temp = 22.222;
-        s.pres = 999.999;
+        s.pres = 1000.1;
 
-
+#endif
 
         eink_wakeup();
         eink_clear();
 
-        print_sensors(&s);
+        print_sensors(&s,plotid);
 
-        eink_plot_draw(EINK_PLOT_CO2);
+        eink_plot_draw(plotid);
 
         eink_update();
         eink_sleep();

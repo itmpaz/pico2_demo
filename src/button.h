@@ -8,7 +8,8 @@
 
 void button_init();
 void button_update(); 
-void button_sleep(uint32_t delay); 
-int button_get_singleclick_counter();
-int button_get_doubleclick_counter();
+bool button_sleep(uint32_t delay); 
+void button_clickreset(); 
+uint32_t button_get_singleclick_counter();
+uint32_t button_get_doubleclick_counter();
 

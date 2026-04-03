@@ -11,6 +11,7 @@
 #define EINK_PLOT_HUM 1
 #define EINK_PLOT_TMP 2
 #define EINK_PLOT_PRS 3
+#define EINK_PLOT_MAX 4
 
 
 typedef struct tag_plot

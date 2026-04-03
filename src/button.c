@@ -17,12 +17,16 @@ static uint32_t _doubleclick_counter      = 0;
 
 
 
-void button_sleep(uint32_t delay)
+bool button_sleep(uint32_t delay)
 {
+    uint32_t c = _singleclick_counter + _doubleclick_counter;
     for(int i=0;i<delay;i++)
     {   button_update();       
+        if (c != _singleclick_counter + _doubleclick_counter)
+            return true;
         sleep_ms(1); 
     }
+    return false;
 }
 
 
@@ -105,11 +109,17 @@ void button_update() {
 
 
 
-int button_get_singleclick_counter() {
+uint32_t button_get_singleclick_counter() {
     return _singleclick_counter;
 }
 
 
-int button_get_doubleclick_counter() {
+uint32_t button_get_doubleclick_counter() {
     _doubleclick_counter;
+}
+
+void button_clickreset()
+{
+    _doubleclick_counter=0;
+    _singleclick_counter=0;
 }

@@ -4,19 +4,20 @@
 
 int a=0;
 
-PLOT _plots[] = {   {EINK_WIDTH, EINK_HEIGHT,0,1.0F,350.0F,2000.0F,400.0F,1000.0F,60, {0} },
-                    {EINK_WIDTH, EINK_HEIGHT,0,1.0F,400.0F,2000.0F,400.0F,1000.0F,60, {0} },
-                    {EINK_WIDTH, EINK_HEIGHT,0,1.0F,400.0F,2000.0F,400.0F,1000.0F,60, {0} },                    
-                    {EINK_WIDTH, EINK_HEIGHT,0,1.0F,400.0F,2000.0F,400.0F,1000.0F,60, {0} },                    
-                    };
+PLOT _plots[EINK_PLOT_MAX] = {   
+    {EINK_WIDTH, EINK_HEIGHT,0,1.0F,350.0F,2000.0F,400.0F, 1000.0F,60, {0} }, // co2
+    {EINK_WIDTH, EINK_HEIGHT,0,1.0F, 15.0F,  70.0F, 50.0F,   50.0F,60, {0} }, // hum
+    {EINK_WIDTH, EINK_HEIGHT,0,1.0F, 10.0F,  40.0F, 20.0F,   20.0F,60, {0} }, // temp                  
+    {EINK_WIDTH, EINK_HEIGHT,0,1.0F,980.0F,1035.0F,1000.0F,1015.0F,60, {0} }, // preassure                  
+    };
 
-uint _plotscount = sizeof(_plots) / sizeof(PLOT);    
+
 
 
 
 void eink_plot_init()
 {
-    for(int i=0;i<_plotscount;i++) 
+    for(int i=0;i<EINK_PLOT_MAX;i++) 
 	{   PLOT* p = &(_plots[i]);
         p->pos=0;
         p->factor =  (p->max_value - p->min_value) / p->ymax;
