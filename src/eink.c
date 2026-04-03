@@ -6,17 +6,8 @@
 #include "printstream.h"
 
 
-#define EINK_WIDTH  EPD_1IN54_V2_WIDTH
-#define EINK_HEIGHT EPD_1IN54_V2_HEIGHT
-
-#define EINK_BYTESPERROW ((EINK_WIDTH+7) / 8)
-#define EINK_IMGSIZE (EINK_BYTESPERROW * EINK_HEIGHT) 
 
 
-#define EINK_WHITE 0xFF
-#define EINK_BLACK 0x00
-
-#define EINK_PLOTWIDTH  EINK_WIDTH
 
 
 extern sFONT Font24;
@@ -25,13 +16,11 @@ extern sFONT Font16;
 
 uint8_t eink_img[EINK_IMGSIZE]={0};
 
-uint8_t eink_plot[EINK_PLOTWIDTH]={};
 
-uint eink_plotpos=0;
 
-#define EINK_NORMPPM 400
 
-#define EINK_PLOT_FACTOR 50
+
+
 
 
 #define EINK_ROTATE 270
@@ -46,13 +35,13 @@ void eink_rotate_screen(int* x, int* y)
 #if	EINK_ROTATE==270
 	int t = *x;
 	*x = *y;
-	*y = EINK_WIDTH - t;
+	*y = (EINK_WIDTH-1) - t;
 #elif EINK_ROTATE==180
-	*x = EINK_WIDTH - *x;
-	*y = EINK_HEIGHT -*y;
+	*x = (EINK_WIDTH -1) - *x;
+	*y = (EINK_HEIGHT-1) -*y;
 #elif EINK_ROTATE==90
 	int t = *x;
-	*x = EINK_HEIGHT -*y;
+	*x = (EINK_HEIGHT-1) -*y;
 	*y =  t;
 #endif
 
@@ -70,26 +59,14 @@ sFONT* eink_getfont(int fontid)
 }
 
 
-void eink_addplot(int value)
-{
-	eink_plot[eink_plotpos]=value/EINK_PLOT_FACTOR;
-	//printf("Plot[%i] = %i\n",eink_plotpos,value);
-	eink_plotpos++;
-	if (eink_plotpos==EINK_PLOTWIDTH)
-		eink_plotpos=0;
-
-}
-
-
-
 
 
 void eink_dot(int x, int y, uint8_t color)
 {
+	eink_rotate_screen(&x,&y);	
+	
 	if ((x>=EINK_WIDTH)||(x<0)||(y>=EINK_HEIGHT)||(y<0))
 		return;
-
-	eink_rotate_screen(&x,&y);		
 
 	uint x_byte = x / 8;
 	uint x_pos = 7- (x % 8);
@@ -102,52 +79,6 @@ void eink_dot(int x, int y, uint8_t color)
 	}
 }
 
-void eink_drawplot()
-{
-	uint pos=eink_plotpos;
-	uint16_t NORMPPM = 1000; //ppm
-	int lasty = -1; 
-
-	for(int x=EINK_PLOTWIDTH-1;x>=0;x--)
-	{
-		if (pos==0)
-			pos=EINK_PLOTWIDTH;
-		pos--;
-		
-		int y = EINK_HEIGHT - eink_plot[pos];
-
-		if (lasty != -1)
-		{
-			
-
-			int yd0 = lasty>y ? y : lasty;	
-			int yd1 = lasty>y ? lasty : y;
-			for(int yy = yd0; yy<=yd1;yy++)
-			{	eink_dot(x,yy,EINK_BLACK);
-			}
-
-		} else
-		{	eink_dot(x,y,EINK_BLACK);
-		}
-
-		lasty = y;
-
-
-		int y0 = EINK_HEIGHT - NORMPPM/EINK_PLOT_FACTOR;
-
-		if (x % 3==0)
-			eink_dot(x,y0,EINK_BLACK);
-		
-		if (x % 25 == 0)
-		{	for(int k=0;k<60;k++)
-				if (k%3==0)
-					eink_dot(x,EINK_HEIGHT-k,EINK_BLACK);
-		}
-
-	}
-
-	
-}
 
 
 void eink_print_char(uint8_t* image, int x, int y, char ch,int fontid)
@@ -216,10 +147,7 @@ void eink_init()
     DEV_Delay_ms(100);
 	
 	
-	
-	eink_plotpos=0;
-	for(int n=0;n<EINK_PLOTWIDTH;n++)
-		eink_addplot(EINK_NORMPPM);
+
 
 }
 

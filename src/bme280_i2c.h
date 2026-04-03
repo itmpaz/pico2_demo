@@ -1,4 +1,4 @@
-
+#pragma once
 
 #define BME280_CHIPID 0x60
 
