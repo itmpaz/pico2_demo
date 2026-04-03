@@ -8,6 +8,9 @@
 #define EINK_MAX_PLOTWIDTH  EINK_WIDTH
 
 #define EINK_PLOT_CO2 0
+#define EINK_PLOT_HUM 1
+#define EINK_PLOT_TMP 2
+#define EINK_PLOT_PRS 3
 
 
 typedef struct tag_plot
@@ -16,8 +19,11 @@ typedef struct tag_plot
     uint height;
     uint pos;
     float factor;
+    float min_value;
+    float max_value;
     float default_value; 
-    float zero_value;   
+    float axis_value;   
+    uint ymax;
     uint8_t data[EINK_MAX_PLOTWIDTH];
 
 } PLOT;

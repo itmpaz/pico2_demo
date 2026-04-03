@@ -4,10 +4,10 @@
 
 int a=0;
 
-PLOT _plots[] = {   {EINK_WIDTH, EINK_HEIGHT,0,50.0F,400.0F,1000.0F, {0} },
-                    {EINK_WIDTH, EINK_HEIGHT,0,50.0F,400.0F,1000.0F, {0} },
-                    {EINK_WIDTH, EINK_HEIGHT,0,50.0F,400.0F,1000.0F, {0} },                    
-                    {EINK_WIDTH, EINK_HEIGHT,0,50.0F,400.0F,1000.0F, {0} },                    
+PLOT _plots[] = {   {EINK_WIDTH, EINK_HEIGHT,0,1.0F,350.0F,2000.0F,400.0F,1000.0F,60, {0} },
+                    {EINK_WIDTH, EINK_HEIGHT,0,1.0F,400.0F,2000.0F,400.0F,1000.0F,60, {0} },
+                    {EINK_WIDTH, EINK_HEIGHT,0,1.0F,400.0F,2000.0F,400.0F,1000.0F,60, {0} },                    
+                    {EINK_WIDTH, EINK_HEIGHT,0,1.0F,400.0F,2000.0F,400.0F,1000.0F,60, {0} },                    
                     };
 
 uint _plotscount = sizeof(_plots) / sizeof(PLOT);    
@@ -19,8 +19,10 @@ void eink_plot_init()
     for(int i=0;i<_plotscount;i++) 
 	{   PLOT* p = &(_plots[i]);
         p->pos=0;
+        p->factor =  (p->max_value - p->min_value) / p->ymax;
         for(int n=0;n<p->width;n++)
             eink_plot_add(i,p->default_value);
+        
     }
 }
 
@@ -28,7 +30,7 @@ void eink_plot_init()
 void eink_plot_add(int index, float value)
 {
     PLOT* p = &(_plots[index]);
-	p->data[p->pos++] = (uint8_t)(value / p->factor);
+	p->data[p->pos++] = (uint8_t)( (value -p->min_value) / p->factor);
 	if (p->pos==p->width)
 		p->pos=0;
 }
@@ -50,12 +52,10 @@ void eink_plot_draw(int index)
 			pos=p->width;
 		pos--;
 		
-		int y = p->height - p->data[pos];
+		int y = p->height - p->data[pos];// - (int)(p->min_value/p->factor);
 
 		if (lasty != -1)
 		{
-			
-
 			int yd0 = lasty>y ? y : lasty;	
 			int yd1 = lasty>y ? lasty : y;
 			for(int yy = yd0; yy<=yd1;yy++)
@@ -69,14 +69,14 @@ void eink_plot_draw(int index)
 		lasty = y;
 
 
-		int y0 = p->height - (int)(p->zero_value/p->factor);
+		int y0 = p->height - (int)((p->axis_value-p->min_value)/p->factor);
 
 
 		if (x % 3==0)
 			eink_dot(x,y0,EINK_BLACK);
 		
 		if (x % 25 == 0)
-		{	for(int k=0;k<60;k++)
+		{	for(int k=0;k<p->ymax;k++)
 				if (k%3==0)
 					eink_dot(x,p->height-k,EINK_BLACK);
 		}
