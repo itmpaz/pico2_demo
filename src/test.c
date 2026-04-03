@@ -5,7 +5,7 @@
 #include "eink.h"
 #include "eink_plot.h"
 #include "bme280_i2c.h"
-
+#include "button.h"
 
 typedef struct 
 {
@@ -19,6 +19,10 @@ typedef struct
 
 
 #define PLOT_UPDATE_PERIOD_SEC 144 //8 hours on the screen
+
+
+
+
 
 void wait_and_update_plot(uint ms,SENSORS* s)
 {
@@ -34,11 +38,31 @@ void wait_and_update_plot(uint ms,SENSORS* s)
         {   eink_plot_add(EINK_PLOT_CO2,s->co2);
             t0 = t;
         }
-        sleep_ms(sleep_step); 
+        button_sleep(sleep_step);
         sleep_sum+=sleep_step;
     }
 
 }
+
+void print_sensors(SENSORS* s)
+{
+    char text[50];
+
+    sprintf(text,"%d ",(uint)s->co2);
+    uint pos = eink_print(0,85,text,EINK_FNT_BIG);    
+    eink_print(pos,98,"ppm",EINK_FNT_MID);    
+
+
+    sprintf(text,"%.1f hPa",s->pres);
+    eink_print(0,0,text,EINK_FNT_MID);
+    sprintf(text,"%.1f 'C",s->temp);
+    eink_print(0,25,text,EINK_FNT_MID);
+    sprintf(text,"%.1f %%RH",s->hum);
+    eink_print(0,50,text,EINK_FNT_MID);
+
+}
+
+
 
 
 #define SHOW_TIME_OK 10000
@@ -51,6 +75,8 @@ int main()
 
     stdio_init_all();
     printf("Init\n");
+
+    button_init();  
 
     mhz19b_init();
     bool z19_ok = mhz19b_test();
@@ -93,7 +119,6 @@ int main()
 
     printf("Start\n");
     uint c=0;
-    char text[50];
     SENSORS s={0};
 
     while(1)
@@ -101,7 +126,7 @@ int main()
 
         
         mhz19b_read();
-        sleep_ms(100);
+        button_sleep(100);
         if (c==mhz19b_data()->co2_counter)
         {   printf("skip %i, %i\n",mhz19b_data()->co2_counter,mhz19b_data()->cs_error_counter);
             mhz19b_protocolreset();
@@ -114,25 +139,17 @@ int main()
         bme280_read(&s.pres,&s.temp,&s.hum);
         printf("P %.3f hPa, T %.2f C, H %.2f %%RH\n",s.pres,s.temp,s.hum);
 
-
+        s.co2 = 555.555;
+        s.hum = 33.333;
+        s.temp = 22.222;
+        s.pres = 999.999;
 
 
 
         eink_wakeup();
         eink_clear();
 
-        sprintf(text,"%d ",s.co2);
-        uint pos = eink_print(0,85,text,EINK_FNT_BIG);    
-        eink_print(pos,98,"ppm",EINK_FNT_MID);    
-
-
-        sprintf(text,"%.1f hPa",s.pres);
-        eink_print(0,0,text,EINK_FNT_MID);
-        sprintf(text,"%.1f 'C",s.temp);
-        eink_print(0,25,text,EINK_FNT_MID);
-        sprintf(text,"%.1f %%RH",s.hum);
-        eink_print(0,50,text,EINK_FNT_MID);
-
+        print_sensors(&s);
 
         eink_plot_draw(EINK_PLOT_CO2);
 

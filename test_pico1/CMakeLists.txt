@@ -49,6 +49,7 @@ add_executable(pico1_test
     ../src/font50.c
     ../src/printstream.c
     ../src/eink_plot.c
+    ../src/button.c
     )
 
 
