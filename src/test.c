@@ -43,7 +43,9 @@ int main()
 
     eink_init();
     int bme_chipid = bme280_init();
-    printf("BME Chip id: 0x%02X\n",bme_chipid);
+    bool bme_ok = (bme_chipid==BME280_CHIPID);
+    if (!bme_ok)
+        printf("BME Chip id: 0x%02X\n",bme_chipid);
 
     uint show_time = SHOW_TIME_OK;
 
@@ -51,7 +53,7 @@ int main()
     eink_print(0,0,"Air station",EINK_FNT_MID);
     eink_print(0,25,"Pico 1 zero",EINK_FNT_MID);
     eink_print(32,175,"APR 2026",EINK_FNT_MID);
-    if (bme_chipid==BME280_CHIPID)
+    if (bme_ok)
     {   eink_print(0,75,"BME280..........OK",EINK_FNT_SML);
     } else
     {   eink_print(0,75,"BME280.......ERROR",EINK_FNT_SML);
@@ -64,9 +66,7 @@ int main()
         show_time = SHOW_TIME_ERROR;
     }
 
-
     eink_update();
-
     
     eink_sleep();
     sleep_ms(show_time);
@@ -89,8 +89,6 @@ int main()
         if (c==mhz19b_data()->co2_counter)
         {   printf("skip %i, %i\n",mhz19b_data()->co2_counter,mhz19b_data()->cs_error_counter);
             mhz19b_protocolreset();
-            sleep_ms(1000);
-            continue;
         }
 
         eink_wakeup();

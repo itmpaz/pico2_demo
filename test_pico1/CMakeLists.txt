@@ -37,7 +37,22 @@ add_definitions(-DAPP_TITLE="Pico 1z")
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(pico1_test ../src/test.c ../src/mhz19b.c ../src/DEV_Config.c ../src/EPD_1in54_V2.c ../src/font24.c ../src/eink.c ../src/bme280_i2c.c ../src/font16.c ../src/font50.c)
+add_executable(pico1_test 
+    ../src/test.c 
+    ../src/mhz19b.c 
+    ../src/DEV_Config.c 
+    ../src/EPD_1in54_V2.c 
+    ../src/font24.c 
+    ../src/eink.c 
+    ../src/bme280_i2c.c 
+    ../src/font16.c 
+    ../src/font50.c
+    ../src/printstream.c
+    )
+
+
+#pico_generate_pio_header(pico1_test ${CMAKE_CURRENT_LIST_DIR}/../src/ws2812.pio OUTPUT_DIR ${CMAKE_CURRENT_LIST_DIR}/generated)
+
 
 pico_set_program_name(pico1_test "pico1_test")
 pico_set_program_version(pico1_test "0.1")
@@ -59,6 +74,7 @@ target_include_directories(pico1_test PRIVATE
 target_link_libraries(pico1_test 
         hardware_spi
         hardware_i2c
+		hardware_pio
         )
 
 pico_add_extra_outputs(pico1_test)

@@ -3,6 +3,7 @@
 #include "EPD_1in54_V2.h"
 #include "fonts.h"
 #include "Debug.h"
+#include "printstream.h"
 
 
 #define EINK_WIDTH  EPD_1IN54_V2_WIDTH
@@ -186,8 +187,13 @@ uint16_t eink_print(int x, int y, char* text,int fontid)
 
 void eink_clear()
 {
-    memset(eink_img,0xFF,sizeof(eink_img));
+	uint8_t fill = 0xFF;
+	print_buffer(&fill,1,STREAM_TYPE_FILL);
+    memset(eink_img,fill,sizeof(eink_img));
 }
+
+
+
 
 void eink_sleep()
 {
@@ -224,8 +230,12 @@ void eink_wakeup()
 }
 
 
+
+
+
 void eink_update()
 {
+	print_buffer(eink_img,EINK_IMGSIZE,STREAM_TYPE_DATA);
 
     EPD_1IN54_V2_Display(eink_img);
     DEV_Delay_ms(100);

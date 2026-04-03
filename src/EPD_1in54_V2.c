@@ -127,11 +127,13 @@ parameter:
 ******************************************************************************/
 static void EPD_1IN54_V2_ReadBusy(void)
 {
-    Debug("e-Paper busy\r\n");
+    
+    uint counter = 0;
     while(DEV_Digital_Read(EPD_BUSY_PIN) == 1) {      //LOW: idle, HIGH: busy
         DEV_Delay_ms(1);
+        counter++;
     }
-    Debug("e-Paper busy release\r\n");
+    Debug("eink:  update time %i\r\n",counter);
 }
 
 /******************************************************************************
