@@ -172,8 +172,8 @@ int main()
     SENSORS s={0};
     int plotid = EINK_PLOT_CO2;
     int co2led_mode = 0;
-    const int co2led_mode_max = 4;
-    const int co2led_mode_step = 256 / co2led_mode_max;
+    int co2led_levels[] = {0,1,5,64,255} ;
+    const int co2led_mode_max = sizeof(co2led_levels)/sizeof(int);
 
     while(1)
     {
@@ -207,7 +207,7 @@ int main()
         while (n>0)
         {
             co2led_mode++;
-            if  (co2led_mode>co2led_mode_max)
+            if  (co2led_mode>=co2led_mode_max)
                 co2led_mode = 0;
             n--;
             printf("CO2 led %i\n",co2led_mode);
@@ -215,7 +215,7 @@ int main()
         button_clickreset();  
 
 
-        led_co2(s.co2,co2led_mode*co2led_mode_step);
+        led_co2(s.co2,co2led_levels[co2led_mode]);
 
 
 #ifndef SHOW_TITLE_SCREEN         
