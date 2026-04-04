@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/pio.h"
 #include "ws2812.pio.h"
@@ -49,4 +50,57 @@ void led_color(uint8_t c)
         break;
     }
 
+}
+
+
+void led_value_to_rgb(float curr, float min, float norm, float max,uint8_t level, uint8_t *r, uint8_t *g, uint8_t *b)
+{
+    /* Clamp curr to [min, max] */
+    if (curr < min) curr = min;
+    if (curr > max) curr = max;
+
+    float ratio;
+
+    if (curr <= norm) {
+        /* Green → Yellow: min..norm */
+        ratio = (norm > min) ? (curr - min) / (norm - min) : 0.0f;
+        *r = (uint8_t)(level * ratio);   
+        *g = level;                       
+        *b = 0;
+    } else {
+        /* Yellow → Red: norm..max */
+        ratio = (max > norm) ? (curr - norm) / (max - norm) : 1.0f;
+        *r = level;                            
+        *g = (uint8_t)(level * (1.0f - ratio)); 
+        *b = 0;
+    }
+}
+
+void led_co2(float value,int level)
+{
+    if (level<=0)
+    {
+        led_off();
+        return;
+    }
+    if (level>255)
+        level = 255;
+
+    const float co2_min = 500;
+    const float co2_norm = 1000;
+    const float co2_max = 2000;
+
+    uint8_t r,g,b;
+
+    led_value_to_rgb(value, co2_min, co2_norm, co2_max,level, &r, &g, &b);
+
+    led_rgb(r,g,b);
+
+    printf("CO2 RGB %i,%i,%i\n",r,g,b);
+
+}
+
+void led_off()
+{
+    led_rgb(0,0,0);
 }

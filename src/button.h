@@ -1,10 +1,11 @@
+#pragma once
 #include <stdio.h>
 #include "pico/stdlib.h"
 
 
 #define BUTTON_PIN 7
 #define BUTTON_DEBOUNCE_TIME_MS       20
-#define BUTTON_DBLCLICK_MAXTIME_MS   350
+#define BUTTON_DBLCLICK_MAXTIME_MS   400
 
 void button_init();
 void button_update(); 

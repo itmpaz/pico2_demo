@@ -10,3 +10,5 @@
 void led_init();
 void led_rgb(uint8_t red, uint8_t green, uint8_t blue);
 void led_color(uint8_t c);
+void led_off();
+void led_co2(float value,int level);

@@ -61,7 +61,6 @@ void button_update() {
         _debounce_start_ms     = now_ms;
         _debounce_active       = true;
         _button_last_raw_state = raw;
-        printf("RAW %i\n",raw);
     }
 
     if (_debounce_active &&
@@ -115,7 +114,7 @@ uint32_t button_get_singleclick_counter() {
 
 
 uint32_t button_get_doubleclick_counter() {
-    _doubleclick_counter;
+    return _doubleclick_counter;
 }
 
 void button_clickreset()

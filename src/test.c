@@ -160,7 +160,7 @@ int main()
     eink_update();
     
     eink_sleep();
-    
+
     sleep_ms(show_time);
     
 #endif    
@@ -171,6 +171,9 @@ int main()
     uint c=0;
     SENSORS s={0};
     int plotid = EINK_PLOT_CO2;
+    int co2led_mode = 0;
+    const int co2led_mode_max = 4;
+    const int co2led_mode_step = 256 / co2led_mode_max;
 
     while(1)
     {
@@ -187,16 +190,33 @@ int main()
             printf("CO2 %d ppm.  %d,%d\n",mhz19b_data()->co2_value,mhz19b_data()->co2_counter,mhz19b_data()->cs_error_counter);
         }
 
+
         bme280_read(&s.pres,&s.temp,&s.hum);
         printf("P %.3f hPa, T %.2f C, H %.2f %%RH\n",s.pres,s.temp,s.hum);
 
-        if (button_get_singleclick_counter()>0)
+
+        int n = button_get_doubleclick_counter();
+        int m = button_get_singleclick_counter();
+        while(m>0)
         {   plotid++;
             if (plotid>=EINK_PLOT_MAX)
                 plotid = 0;
-            button_clickreset();  
+            m--;
             printf("Plot #%i\n",plotid);
         }
+        while (n>0)
+        {
+            co2led_mode++;
+            if  (co2led_mode>co2led_mode_max)
+                co2led_mode = 0;
+            n--;
+            printf("CO2 led %i\n",co2led_mode);
+        }
+        button_clickreset();  
+
+
+        led_co2(s.co2,co2led_mode*co2led_mode_step);
+
 
 #ifndef SHOW_TITLE_SCREEN         
 
@@ -224,8 +244,7 @@ int main()
 
 
 
-    //while (1)
-     //   tight_loop_contents();
+
 
 
 }
