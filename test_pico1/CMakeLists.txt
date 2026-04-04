@@ -47,6 +47,7 @@ add_executable(pico1_test
     ../src/bme280_i2c.c 
     ../src/font16.c 
     ../src/font50.c
+    ../src/font05.c
     ../src/printstream.c
     ../src/eink_plot.c
     ../src/button.c

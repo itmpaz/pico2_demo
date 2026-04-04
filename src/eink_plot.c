@@ -47,6 +47,8 @@ void eink_plot_draw(int index)
 	uint16_t NORMPPM = 1000; //ppm
 	int lasty = -1; 
 
+	int y0 = p->height - (int)((p->axis_value-p->min_value)/p->factor);
+
 	for(int x=p->width;x>=0;x--)
 	{
 		if (pos==0)
@@ -70,7 +72,7 @@ void eink_plot_draw(int index)
 		lasty = y;
 
 
-		int y0 = p->height - (int)((p->axis_value-p->min_value)/p->factor);
+		
 
 
 		if (x % 3==0)
@@ -83,6 +85,18 @@ void eink_plot_draw(int index)
 		}
 
 	}
+
+	const int mic_font_size = 7;
+	char text[20];
+
+	sprintf(text,"%i", (int)p->max_value);
+	eink_print(2,p->height-p->ymax,text,EINK_FNT_MIC);
+	
+	sprintf(text,"%i", (int)p->axis_value);
+	eink_print(2,y0-mic_font_size,text,EINK_FNT_MIC);
+
+	sprintf(text,"%i", (int)p->min_value);
+	eink_print(2,p->height-mic_font_size,text,EINK_FNT_MIC);
 
 	
 }

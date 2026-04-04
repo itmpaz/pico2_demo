@@ -1350,5 +1350,5 @@ sFONT Font50 = {
   Font50_Table,
   28, /* Width */
   50, /* Height */
-
+  FONT_PACK_H,
 };

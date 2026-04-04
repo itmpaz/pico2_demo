@@ -2515,7 +2515,7 @@ sFONT Font24 = {
   Font24_Table,
   17, /* Width */
   24, /* Height */
-
+  FONT_PACK_H,
 };
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
