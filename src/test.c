@@ -6,6 +6,7 @@
 #include "eink_plot.h"
 #include "bme280_i2c.h"
 #include "button.h"
+#include "led.h"
 
 typedef struct 
 {
@@ -107,9 +108,9 @@ void print_sensors(SENSORS* s,int plotid)
 
 #define SHOW_TIME_OK 10000
 #define SHOW_TIME_ERROR 60000
-//#define MEASUREMENT_DELAY 60000
-//#define SHOW_TITLE_SCREEN
-#define MEASUREMENT_DELAY 10000
+#define MEASUREMENT_DELAY 60000
+#define SHOW_TITLE_SCREEN
+//#define MEASUREMENT_DELAY 10000
 
 
 
@@ -118,6 +119,9 @@ int main()
 
     stdio_init_all();
     printf("Init\n");
+
+    led_init();
+    led_color(LED_BLUE);
 
     button_init();  
 
@@ -133,6 +137,7 @@ int main()
 
     uint show_time = SHOW_TIME_OK;
 
+    led_color( ((bme_ok) && (z19_ok)) ? LED_GREEN : LED_RED);
 
 #ifdef SHOW_TITLE_SCREEN   
 
@@ -155,9 +160,12 @@ int main()
     eink_update();
     
     eink_sleep();
+    
     sleep_ms(show_time);
     
 #endif    
+
+    led_color(LED_OFF);
 
     printf("Start\n");
     uint c=0;

@@ -51,10 +51,11 @@ add_executable(pico1_test
     ../src/printstream.c
     ../src/eink_plot.c
     ../src/button.c
+    ../src/led.c
     )
 
 
-#pico_generate_pio_header(pico1_test ${CMAKE_CURRENT_LIST_DIR}/../src/ws2812.pio OUTPUT_DIR ${CMAKE_CURRENT_LIST_DIR}/generated)
+pico_generate_pio_header(pico1_test ${CMAKE_CURRENT_LIST_DIR}/../src/ws2812.pio OUTPUT_DIR ${CMAKE_CURRENT_LIST_DIR}/generated)
 
 
 pico_set_program_name(pico1_test "pico1_test")
@@ -71,6 +72,7 @@ target_link_libraries(pico1_test
 # Add the standard include files to the build
 target_include_directories(pico1_test PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/generated
 )
 
 # Add any user requested libraries
