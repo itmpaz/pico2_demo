@@ -49,10 +49,10 @@ void eink_plot_draw(int index)
 
 	int y0 = p->height - (int)((p->axis_value-p->min_value)/p->factor);
 
-	for(int x=p->width;x>=0;x--)
+	for(int x=p->width-1;x>=0;x--)
 	{
 		if (pos==0)
-			pos=p->width;
+			pos=p->width-1;
 		pos--;
 		
 		int y = p->height - p->data[pos];// - (int)(p->min_value/p->factor);
