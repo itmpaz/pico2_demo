@@ -30,10 +30,17 @@ include(pico_sdk_import.cmake)
 
 project(pico1_test C CXX ASM)
 
+
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-add_definitions(-DAPP_TITLE="Pico 1z")
+string(TIMESTAMP APP_BUILD_DATE "%d.%m.%y")
+message(STATUS "Now: ${APP_BUILD_DATE}")
+
+
+add_definitions(-DAPP_TITLE1="Air station")
+add_definitions(-DAPP_TITLE2="Pico 1 zero")
+add_definitions(-DAPP_VERSION="${APP_BUILD_DATE}")
 
 # Add executable. Default name is the project name, version 0.1
 
@@ -55,7 +62,7 @@ add_executable(pico1_test
     )
 
 
-pico_generate_pio_header(pico1_test ${CMAKE_CURRENT_LIST_DIR}/../src/ws2812.pio OUTPUT_DIR ${CMAKE_CURRENT_LIST_DIR}/generated)
+pico_generate_pio_header(pico1_test ${CMAKE_CURRENT_LIST_DIR}/../src/ws2812.pio OUTPUT_DIR ${PROJECT_BINARY_DIR}/generated)
 
 
 pico_set_program_name(pico1_test "pico1_test")
@@ -72,7 +79,7 @@ target_link_libraries(pico1_test
 # Add the standard include files to the build
 target_include_directories(pico1_test PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
-        ${CMAKE_CURRENT_LIST_DIR}/generated
+        ${PROJECT_BINARY_DIR}/generated
 )
 
 # Add any user requested libraries

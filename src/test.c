@@ -18,10 +18,18 @@ typedef struct
 } SENSORS;
 
 
-
+#if 1
 #define PLOT_UPDATE_PERIOD_SEC 144 //8 hours on the screen
-
-
+#define SHOW_TIME_OK 10000
+#define SHOW_TIME_ERROR 60000
+#define MEASUREMENT_DELAY 60000
+#define SHOW_TITLE_SCREEN
+#else
+#define PLOT_UPDATE_PERIOD_SEC 10
+#define SHOW_TIME_OK 10000
+#define SHOW_TIME_ERROR 60000
+#define MEASUREMENT_DELAY 10000
+#endif
 
 
 
@@ -106,11 +114,7 @@ void print_sensors(SENSORS* s,int plotid)
 
 
 
-#define SHOW_TIME_OK 10000
-#define SHOW_TIME_ERROR 60000
-#define MEASUREMENT_DELAY 60000
-#define SHOW_TITLE_SCREEN
-//#define MEASUREMENT_DELAY 10000
+
 
 
 
@@ -141,9 +145,9 @@ int main()
 
 #ifdef SHOW_TITLE_SCREEN   
 
-    eink_print(0,0,"Air station",EINK_FNT_MID);
-    eink_print(0,25,"Pico 1 zero",EINK_FNT_MID);
-    eink_print(32,175,"APR 2026",EINK_FNT_MID);
+    eink_print(0,0,APP_TITLE1,EINK_FNT_MID);
+    eink_print(0,25,APP_TITLE2,EINK_FNT_MID);
+    eink_print(84,194,APP_VERSION,EINK_FNT_MIC);
     if (bme_ok)
     {   eink_print(0,75,"BME280..........OK",EINK_FNT_SML);
     } else

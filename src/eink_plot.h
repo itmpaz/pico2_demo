@@ -19,13 +19,14 @@ typedef struct tag_plot
     uint width;
     uint height;
     uint pos;
-    float factor;
     float min_value;
     float max_value;
     float default_value; 
     float axis_value;   
+    float margin_value;   
     uint ymax;
-    uint8_t data[EINK_MAX_PLOTWIDTH];
+    bool isautorange;
+    float data[EINK_MAX_PLOTWIDTH];
 
 } PLOT;
 
